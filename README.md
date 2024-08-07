@@ -2,7 +2,7 @@
 The "Bdjobs-Sign-In-With-Job-Search" project leverages the power of Selenium WebDriver and WebDriverManager to automate the process of signing into bdjobs.comand performing job searches.
 This project streamlines interactions with the bdjobs.com website, allowing users to log in, conduct multiple job searches with different keywords,and navigate through search results effortlessly.
 
-# Key Features:
+# Key Features
 # Automated Login: 
 The script automates the login process, entering the username and password, and navigating through the login steps to access the user's account on bdjobs.com.
 
@@ -15,7 +15,7 @@ The script uses WebDriverWait to ensure that web elements are interactable befor
 # Window Handling:
 The script handles multiple browser windows or tabs, allowing seamless switching between different windows during the automation process.
 
-# Code Structure:
+# Code Structure
 
 # Setup: 
 Initializes the WebDriver using WebDriverManager, and maximizes the browser window.
