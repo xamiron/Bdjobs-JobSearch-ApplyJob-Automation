@@ -29,13 +29,13 @@ public class test {
             driver.findElement(By.cssSelector(".cart-mbdj-r>.btn-wraper>.btn.slu-btn")).click();
 
             // Enter username
-            driver.findElement(By.id("TXTUSERNAME")).sendKeys("avary");
+            driver.findElement(By.id("TXTUSERNAME")).sendKeys("demo");
 
             // Click on the next button
             driver.findElement(By.cssSelector(".btn.btn-success.btn-signin")).click();
 
             // Enter password
-            driver.findElement(By.id("TXTPASS")).sendKeys("12345678");
+            driver.findElement(By.id("TXTPASS")).sendKeys("demo123456");
 
             // Click on the login button
             driver.findElement(By.cssSelector(".btn.btn-success.btn-signin.btn-block")).click();
