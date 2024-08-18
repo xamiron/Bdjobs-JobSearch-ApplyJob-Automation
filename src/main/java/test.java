@@ -1,6 +1,8 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -9,50 +11,45 @@ import java.time.Duration;
 import java.util.Set;
 
 public class test {
-
     public static void main(String[] args) {
-        // Setup WebDriver using WebDriverManager
         WebDriverManager.chromedriver().setup();
         WebDriver driver = new ChromeDriver();
         driver.manage().window().maximize();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
         try {
-            // Navigate to bdjobs.com
             driver.get("https://bdjobs.com");
 
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+            WebElement loginLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("li.hidden-xs.soca>a")));
+            loginLink.click();
 
-            // Click on the login link
-            driver.findElement(By.cssSelector("li.hidden-xs.soca>a")).click();
+            WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".cart-mbdj-r>.btn-wraper>.btn.slu-btn")));
+            loginButton.click();
 
-            // Click on the login button
-            driver.findElement(By.cssSelector(".cart-mbdj-r>.btn-wraper>.btn.slu-btn")).click();
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("TXTUSERNAME")));
+            usernameField.sendKeys("demo");
 
-            // Enter username
-            driver.findElement(By.id("TXTUSERNAME")).sendKeys("avary");
+            WebElement nextButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".btn.btn-success.btn-signin")));
+            nextButton.click();
 
-            // Click on the next button
-            driver.findElement(By.cssSelector(".btn.btn-success.btn-signin")).click();
+            WebElement passwordField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("TXTPASS")));
+            passwordField.sendKeys("demo123");
 
-            // Enter password
-            driver.findElement(By.id("TXTPASS")).sendKeys("12345678");
+            WebElement finalLoginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".btn.btn-success.btn-signin.btn-block")));
+            finalLoginButton.click();
 
-            // Click on the login button
-            driver.findElement(By.cssSelector(".btn.btn-success.btn-signin.btn-block")).click();
+            WebElement keywordField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("txtKeyword")));
+            // Wait for 10 seconds before sending keys
+            Thread.sleep(10000);
+            keywordField.sendKeys("SQA");
 
-            // Wait for the keyword search box to be present and enter "SQA"
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.id("txtKeyword"))).sendKeys("SQA");
+            WebElement searchButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".btn.btn-default[value='Search']")));
+            searchButton.click();
 
-            // Click on the search button
-            driver.findElement(By.cssSelector(".btn.btn-default[value='Search']")).click();
-
-            // Get the current window handle
             String mainWindowHandle = driver.getWindowHandle();
+            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
 
-            // Get all window handles
             Set<String> allWindowHandles = driver.getWindowHandles();
-
-            // Switch to the new window
             for (String handle : allWindowHandles) {
                 if (!handle.equals(mainWindowHandle)) {
                     driver.switchTo().window(handle);
@@ -60,33 +57,49 @@ public class test {
                 }
             }
 
-            // Perform multiple searches with different keywords
-            performSearch(wait, "Developer");
-            performSearch(wait, "@@#$%^&*");
-            performSearch(wait, "Data Entry");
-            performSearch(wait, "12345678");
-            performSearch(wait, "Internal Audit Supervisor - SQA (Quality & Process");
-            performSearch(wait, "Customer Support 123");
+            WebElement jobTitleElement = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[aria-label='browse jobs section'] div:nth-child(3) div:nth-child(1) div:nth-child(1) div:nth-child(2) div:nth-child(1) div:nth-child(1) div:nth-child(1) a:nth-child(1)")));
+            jobTitleElement.click();
+
+            wait.until(ExpectedConditions.numberOfWindowsToBe(3));
+            allWindowHandles = driver.getWindowHandles();
+            for (String handle : allWindowHandles) {
+                if (!handle.equals(mainWindowHandle)) {
+                    driver.switchTo().window(handle);
+                }
+            }
+
+            WebElement applyNowButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn.applynow.printPreviewHide[onclick='formSubmit()']")));
+            applyNowButton.click();
+
+            WebElement salaryField = wait.until(ExpectedConditions.elementToBeClickable(By.id("txtExpectedSalary")));
+            // Wait for 10 seconds before sending keys
+            Thread.sleep(1000);
+            salaryField.sendKeys("@#$%^&*");
+            WebElement appBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn.app-btn[type='button']")));
+            appBtn.click();
+
+            salaryField.clear();
+            salaryField.sendKeys("tgrig");
+            Thread.sleep(10000);
+            appBtn.click();
+
+            salaryField.clear();
+            salaryField.sendKeys("y010abc");
+            Thread.sleep(10000);
+            appBtn.click();
+
+            salaryField.clear();
+            salaryField.sendKeys("5000");
+            Thread.sleep(10000);
+            appBtn.click();
+
+            //Click On Undo Application 
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".undo__btn"))).click();
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[class='btn btn-default btn-danger-delete']"))).click();
 
 
-        } finally {
-            // Close the browser
-            driver.quit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-    }
-
-    // Method to perform search with different keywords
-    private static void performSearch(WebDriverWait wait, String keyword) {
-        // Wait for the dropdown to be clickable and click it
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".dropdown>a[aria-label='search by Keyword']"))).click();
-
-        // Clear previous search
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("txtsearch"))).clear();
-
-        // Type new keyword
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("txtsearch"))).sendKeys(keyword);
-
-        // Click on the search button
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn.done-button-s[type='button']"))).click();
     }
 }
